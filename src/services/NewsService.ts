@@ -7,13 +7,21 @@ export class NewsService {
         return result.rows;
     }
 
-    async findByTitle(title: string): Promise<News | null> {
-        const result = await pool.query('SELECT * FROM news WHERE title = $1', [title]);
-        return result.rows[0] || null;
+    async findByTitle(title: string): Promise<News[]> {
+        const result = await pool.query('SELECT * FROM news WHERE title ILIKE $1 ORDER BY date DESC', [`%${title}%`]);
+        return result.rows;
     }
 
     async findByAuthor(author: string): Promise<News[]> {
-        const result = await pool.query('SELECT * FROM news WHERE author = $1 ORDER BY date DESC', [author]);
+        const result = await pool.query('SELECT * FROM news WHERE author ILIKE $1 ORDER BY date DESC', [`%${author}%`]);
+        return result.rows;
+    }
+
+    async findByQuery(q: string): Promise<News[]> {
+        const result = await pool.query(
+            `SELECT * FROM news WHERE title ILIKE $1 OR author ILIKE $1 ORDER BY date DESC`,
+            [`%${q}%`]
+        );
         return result.rows;
     }
 

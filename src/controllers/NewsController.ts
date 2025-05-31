@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { NewsService } from '../services/NewsService';
+import { News } from '../models/News';
 
 export class NewsController {
     private newsService: NewsService;
@@ -22,20 +23,18 @@ export class NewsController {
 
     async getNewByName(req: Request, res: Response): Promise<void> {
         try {
-            const { title, author } = req.query;
-            console.log('Searching news with params:', { title, author });
-            let news;
+            const { q } = req.query;
+            console.log('Searching news with param q:', q);
+            let news: News[] = [];
 
-            if (title) {
-                news = await this.newsService.findByTitle(title as string);
-            } else if (author) {
-                news = await this.newsService.findByAuthor(author as string);
+            if (q) {
+                news = await this.newsService.findByQuery(q as string);
             } else {
-                res.status(400).json({ message: 'Either title or author parameter is required' });
+                res.status(400).json({ message: 'Query parameter q is required' });
                 return;
             }
 
-            if (!news) {
+            if (!news || news.length === 0) {
                 res.status(404).json({ message: 'News not found' });
                 return;
             }
