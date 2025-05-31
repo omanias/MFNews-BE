@@ -55,4 +55,18 @@ export class UserController {
             res.status(500).json({ message: 'Internal server error' });
         }
     }
+
+    async login(req: Request, res: Response): Promise<void> {
+        try {
+            const { email, password } = req.body;
+            const user = await this.userService.login(email, password);
+            if (!user) {
+                res.status(401).json({ message: 'Invalid email or password' });
+                return;
+            }
+            res.json(user);
+        } catch (error) {
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
 } 

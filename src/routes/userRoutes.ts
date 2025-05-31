@@ -28,6 +28,17 @@ router.post('/', userController.createUser.bind(userController));
 
 /**
  * @swagger
+ * /api/users/login:
+ *   post:
+ *     summary: Login a user
+ *     responses:
+ *       200:
+ *         description: User logged in successfully
+ */
+router.post('/login', userController.login.bind(userController));
+
+/**
+ * @swagger
  * /api/users/{id}:
  *   put:
  *     summary: Update a user
