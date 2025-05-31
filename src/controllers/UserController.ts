@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/UserService';
+import jwt from 'jsonwebtoken';
 
 export class UserController {
     private userService: UserService;
@@ -64,7 +65,27 @@ export class UserController {
                 res.status(401).json({ message: 'Invalid email or password' });
                 return;
             }
-            res.json(user);
+
+            // Generate JWT token with role
+            const token = jwt.sign(
+                {
+                    id: user.id,
+                    role: user.role
+                },
+                process.env.JWT_SECRET || 'your-secret-key',
+                { expiresIn: '24h' }
+            );
+
+            // Return user data and token
+            res.json({
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    role: user.role
+                },
+                token
+            });
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
         }

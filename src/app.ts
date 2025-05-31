@@ -5,6 +5,7 @@ import userRoutes from './routes/userRoutes';
 import newsRoutes from './routes/newsRoutes';
 import initializeDatabase from './config/initDb';
 import cors from 'cors';
+import passport from './config/passport';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(cors({
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
 // Swagger documentation route
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));

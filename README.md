@@ -2,6 +2,7 @@ express
 passport passport-jwt jsonwebtoken
 dotenv
 swagger
+bcrypt
 
 docker-compose up -d
 docker-compose down

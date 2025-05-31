@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { NewsController } from '../controllers/NewsController';
+import { authenticateJWT, checkRole } from '../middlewares/auth.middleware';
 
 const router = Router();
 const newsController = new NewsController();
@@ -46,17 +47,23 @@ router.get('/search', newsController.getNewByName.bind(newsController));
  * /api/news:
  *   post:
  *     summary: Add a new news article
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       201:
  *         description: News created successfully
+ *       401:
+ *         description: Unauthorized
  */
-router.post('/', newsController.addNew.bind(newsController));
+router.post('/', authenticateJWT, checkRole(['admin', 'editor']), newsController.addNew.bind(newsController));
 
 /**
  * @swagger
  * /api/news/{id}:
  *   delete:
  *     summary: Delete a news article
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -66,16 +73,20 @@ router.post('/', newsController.addNew.bind(newsController));
  *     responses:
  *       204:
  *         description: News deleted successfully
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: News not found
  */
-router.delete('/:id', newsController.deleteNew.bind(newsController));
+router.delete('/:id', authenticateJWT, checkRole(['admin', 'editor']), newsController.deleteNew.bind(newsController));
 
 /**
  * @swagger
  * /api/news/{id}:
  *   put:
  *     summary: Update a news article
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -106,9 +117,11 @@ router.delete('/:id', newsController.deleteNew.bind(newsController));
  *     responses:
  *       200:
  *         description: News updated successfully
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: News not found
  */
-router.put('/:id', newsController.updateNew.bind(newsController));
+router.put('/:id', authenticateJWT, checkRole(['admin', 'editor']), newsController.updateNew.bind(newsController));
 
 export default router; 
