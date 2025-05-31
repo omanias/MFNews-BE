@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpecs from './swagger';
 import userRoutes from './routes/userRoutes';
+import newsRoutes from './routes/newsRoutes';
+import initializeDatabase from './config/initDb';
 
 const app = express();
 
@@ -14,6 +16,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // Routes
 app.use('/api/users', userRoutes);
+app.use('/api/news', newsRoutes);
 
 // Example route with Swagger documentation
 /**
@@ -38,10 +41,21 @@ app.get('/api/hello', (req: Request, res: Response) => {
     res.json({ message: 'Hello World!' });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    console.log(`Swagger documentation available at http://localhost:${PORT}/api-docs`);
-});
+const PORT = 3000;
+
+// Initialize database and start server
+const startServer = async () => {
+    try {
+        await initializeDatabase();
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+            console.log(`Swagger documentation available at http://localhost:${PORT}/api-docs`);
+        });
+    } catch (error) {
+        process.exit(1);
+    }
+};
+
+startServer();
 
 export default app; 
