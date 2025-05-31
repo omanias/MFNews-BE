@@ -10,9 +10,37 @@ const newsController = new NewsController();
  * /api/news:
  *   get:
  *     summary: Get all news
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
  *     responses:
  *       200:
  *         description: List of news
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/News'
+ *                 total:
+ *                   type: integer
+ *                 page:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
  */
 router.get('/', newsController.getNews.bind(newsController));
 
@@ -35,6 +63,12 @@ router.get('/', newsController.getNews.bind(newsController));
  *     responses:
  *       200:
  *         description: News found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/News'
  *       400:
  *         description: Either title or author parameter is required
  *       404:
@@ -49,11 +83,41 @@ router.get('/search', newsController.getNewByName.bind(newsController));
  *     summary: Add a new news article
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - body
+ *               - author
+ *             properties:
+ *               title:
+ *                 type: string
+ *               subtitle:
+ *                 type: string
+ *               body:
+ *                 type: string
+ *               image_url:
+ *                 type: string
+ *               author:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *                 format: date-time
  *     responses:
  *       201:
  *         description: News created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/News'
  *       401:
  *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Insufficient permissions
  */
 router.post('/', authenticateJWT, checkRole(['admin', 'editor']), newsController.addNew.bind(newsController));
 
@@ -75,6 +139,8 @@ router.post('/', authenticateJWT, checkRole(['admin', 'editor']), newsController
  *         description: News deleted successfully
  *       401:
  *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Insufficient permissions
  *       404:
  *         description: News not found
  */
@@ -117,8 +183,14 @@ router.delete('/:id', authenticateJWT, checkRole(['admin', 'editor']), newsContr
  *     responses:
  *       200:
  *         description: News updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/News'
  *       401:
  *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Insufficient permissions
  *       404:
  *         description: News not found
  */
