@@ -3,9 +3,29 @@ import pool from '../config/database';
 import bcrypt from 'bcrypt';
 
 export class UserService {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async findById(id: string): Promise<User | null> {
         // TODO: Implement database query (debe devolver también el campo role)
         return null;
+    }
+
+    async findByEmail(email: string): Promise<User | null> {
+        const result = await pool.query(
+            'SELECT * FROM users WHERE email = $1',
+            [email]
+        );
+        if (result.rows.length === 0) {
+            return null;
+        }
+        const user = result.rows[0];
+        return {
+            id: user.id,
+            email: user.email,
+            password: user.password,
+            role: user.role,
+            createdAt: user.created_at,
+            updatedAt: user.updated_at
+        };
     }
 
     async create(userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User> {
@@ -25,11 +45,13 @@ export class UserService {
         };
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async update(id: string, userData: Partial<User>): Promise<User | null> {
         // TODO: Implement user update (debe aceptar y actualizar el campo role)
         return null;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async delete(id: string): Promise<boolean> {
         // TODO: Implement user deletion
         return false;
