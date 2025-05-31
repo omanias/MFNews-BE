@@ -4,8 +4,16 @@ import swaggerSpecs from './swagger';
 import userRoutes from './routes/userRoutes';
 import newsRoutes from './routes/newsRoutes';
 import initializeDatabase from './config/initDb';
+import cors from 'cors';
 
 const app = express();
+
+// CORS configuration
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Middleware
 app.use(express.json());

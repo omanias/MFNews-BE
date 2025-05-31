@@ -73,13 +73,42 @@ router.delete('/:id', newsController.deleteNew.bind(newsController));
 
 /**
  * @swagger
- * /api/news/create:
- *   post:
- *     summary: Create a new news article
+ * /api/news/{id}:
+ *   put:
+ *     summary: Update a news article
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the news article to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               subtitle:
+ *                 type: string
+ *               body:
+ *                 type: string
+ *               image_url:
+ *                 type: string
+ *               author:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *                 format: date-time
  *     responses:
- *       201:
- *         description: News created successfully
+ *       200:
+ *         description: News updated successfully
+ *       404:
+ *         description: News not found
  */
-router.post('/create', newsController.createNew.bind(newsController));
+router.put('/:id', newsController.updateNew.bind(newsController));
 
 export default router; 

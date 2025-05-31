@@ -82,4 +82,19 @@ export class NewsController {
             res.status(500).json({ message: 'Internal server error' });
         }
     }
+
+    async updateNew(req: Request, res: Response): Promise<void> {
+        try {
+            console.log('Updating news with id:', req.params.id, 'Data:', req.body);
+            const news = await this.newsService.update(req.params.id, req.body);
+            if (!news) {
+                res.status(404).json({ message: 'News not found' });
+                return;
+            }
+            res.json(news);
+        } catch (error) {
+            console.error('Error in updateNew:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
 } 
