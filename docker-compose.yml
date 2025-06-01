@@ -26,11 +26,10 @@ services:
     environment:
       - SERVICES=s3
       - DEFAULT_REGION=us-east-1
-      - DATA_DIR=/tmp/localstack/data
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
     ports:
       - "4566:4566"
-    volumes:
-      - ./localstack:/tmp/localstack
     networks:
       - mfnews-network
 

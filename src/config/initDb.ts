@@ -4,13 +4,9 @@ import pool from './database';
 
 async function initializeDatabase() {
     try {
-        // Read the SQL file
         const sql = readFileSync(join(__dirname, 'init.sql'), 'utf8');
-
-        // Execute the SQL
         await pool.query(sql);
 
-        // Add subtitle column if it doesn't exist
         await pool.query(`
             DO $$ 
             BEGIN 
@@ -25,7 +21,6 @@ async function initializeDatabase() {
             END $$;
         `);
 
-        // Add role column to users if it doesn't exist
         await pool.query(`
             DO $$ 
             BEGIN 

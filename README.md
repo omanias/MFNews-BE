@@ -39,11 +39,22 @@ npm install
 
 3. Create a `.env` file in the root directory with the following variables:
 ```env
+# Database Configuration
 DB_USER=postgres
 DB_PASSWORD=postgres
 DB_NAME=mfnews
 DB_PORT=5432
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+
+# JWT Configuration
 JWT_SECRET=your_jwt_secret
+
+# LocalStack S3 Configuration
+LOCALSTACK_ENDPOINT=http://localhost:4566
+LOCALSTACK_DEFAULT_REGION=us-east-1
+LOCALSTACK_ACCESS_KEY_ID=test
+LOCALSTACK_SECRET_ACCESS_KEY=test
 ```
 
 ## 🏃‍♂️ Running the Application
@@ -82,7 +93,7 @@ http://localhost:3000/api-docs
 
 ## 🛠️ Tech Stack
 
-- **Runtime:** Node.js
+- **Runtime:** Node.js (v16 or higher)
 - **Framework:** Express
 - **Language:** TypeScript
 - **Database:** PostgreSQL
@@ -90,8 +101,9 @@ http://localhost:3000/api-docs
 - **Documentation:** Swagger
 - **Testing:** Jest
 - **Containerization:** Docker
-- **Storage:** LocalStack S3
+- **Storage:** LocalStack S3 (bucket: news-images)
 - **File Upload:** Multer
+- **CORS:** Configured for http://localhost:5173
 
 ## 📁 Project Structure
 

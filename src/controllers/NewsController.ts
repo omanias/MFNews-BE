@@ -59,8 +59,10 @@ export class NewsController {
                     Key: key,
                     Body: req.file.buffer,
                     ContentType: req.file.mimetype,
+                    ACL: 'public-read'
                 }));
-                imageUrl = `http://localhost:4566/${BUCKET_NAME}/${key}`;
+                imageUrl = `${process.env.LOCALSTACK_ENDPOINT || 'http://localhost:4566'}/${BUCKET_NAME}/${key}`;
+                console.log('Generated image URL:', imageUrl);
             }
             const newsData = {
                 ...req.body,
@@ -110,8 +112,10 @@ export class NewsController {
                     Key: key,
                     Body: req.file.buffer,
                     ContentType: req.file.mimetype,
+                    ACL: 'public-read'
                 }));
-                imageUrl = `http://localhost:4566/${BUCKET_NAME}/${key}`;
+                imageUrl = `${process.env.LOCALSTACK_ENDPOINT || 'http://localhost:4566'}/${BUCKET_NAME}/${key}`;
+                console.log('Generated image URL:', imageUrl);
             }
             const newsData = {
                 ...req.body,
