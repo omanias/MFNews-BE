@@ -11,12 +11,18 @@ Backend API for the MFNews application built with Node.js, Express, TypeScript, 
 - Docker containerization
 - TypeScript support
 - Jest testing framework
+- Role-based access control (Admin, Editor, User roles)
+- Image upload and storage using LocalStack S3
+- Pagination support for news listing
+- Search functionality for news articles
+- CORS configuration for frontend integration
 
 ## 📋 Prerequisites
 
 - Node.js (v14 or higher)
 - Docker and Docker Compose
 - PostgreSQL (if running locally without Docker)
+- LocalStack (for S3 storage)
 
 ## 🔧 Installation
 
@@ -84,6 +90,8 @@ http://localhost:3000/api-docs
 - **Documentation:** Swagger
 - **Testing:** Jest
 - **Containerization:** Docker
+- **Storage:** LocalStack S3
+- **File Upload:** Multer
 
 ## 📁 Project Structure
 
@@ -98,6 +106,29 @@ src/
 ├── services/         # Business logic
 └── utils/            # Utility functions
 ```
+
+## 🔐 Authentication & Authorization
+
+The API uses JWT-based authentication with role-based access control:
+- **Admin:** Full access to all endpoints
+- **Editor:** Can create, update, and delete news articles
+- **User:** Can view news articles and manage their profile
+
+## 📝 API Endpoints
+
+### News Endpoints
+- `GET /api/news` - Get all news with pagination
+- `GET /api/news/search` - Search news by title or author
+- `POST /api/news` - Create a new news article (requires authentication)
+- `PUT /api/news/:id` - Update a news article (requires authentication)
+- `DELETE /api/news/:id` - Delete a news article (requires authentication)
+
+### User Endpoints
+- `GET /api/users` - Get all users (requires authentication)
+- `POST /api/users` - Create a new user
+- `POST /api/users/login` - User login
+- `PUT /api/users/:id` - Update user (requires authentication)
+- `DELETE /api/users/:id` - Delete user (requires authentication)
 
 ## 🤝 Contributing
 

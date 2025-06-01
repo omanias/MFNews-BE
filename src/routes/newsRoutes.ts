@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import { NewsController } from '../controllers/NewsController';
 import { authenticateJWT, checkRole } from '../middlewares/auth.middleware';
+import multer from 'multer';
 
 const router = Router();
 const newsController = new NewsController();
+const upload = multer();
 
 /**
  * @swagger
@@ -119,7 +121,13 @@ router.get('/search', newsController.getNewByName.bind(newsController));
  *       403:
  *         description: Forbidden - Insufficient permissions
  */
-router.post('/', authenticateJWT, checkRole(['admin', 'editor']), newsController.addNew.bind(newsController));
+router.post('/', authenticateJWT, checkRole(['admin', 'editor']), upload.single('image'), async (req, res, next) => {
+    try {
+        await newsController.addNew(req, res);
+    } catch (err) {
+        next(err);
+    }
+});
 
 /**
  * @swagger
@@ -144,7 +152,13 @@ router.post('/', authenticateJWT, checkRole(['admin', 'editor']), newsController
  *       404:
  *         description: News not found
  */
-router.delete('/:id', authenticateJWT, checkRole(['admin', 'editor']), newsController.deleteNew.bind(newsController));
+router.delete('/:id', authenticateJWT, checkRole(['admin', 'editor']), async (req, res, next) => {
+    try {
+        await newsController.deleteNew(req, res);
+    } catch (err) {
+        next(err);
+    }
+});
 
 /**
  * @swagger
@@ -194,6 +208,12 @@ router.delete('/:id', authenticateJWT, checkRole(['admin', 'editor']), newsContr
  *       404:
  *         description: News not found
  */
-router.put('/:id', authenticateJWT, checkRole(['admin', 'editor']), newsController.updateNew.bind(newsController));
+router.put('/:id', authenticateJWT, checkRole(['admin', 'editor']), upload.single('image'), async (req, res, next) => {
+    try {
+        await newsController.updateNew(req, res);
+    } catch (err) {
+        next(err);
+    }
+});
 
 export default router; 

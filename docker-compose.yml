@@ -20,6 +20,20 @@ services:
       timeout: 5s
       retries: 5
 
+  localstack:
+    image: localstack/localstack:latest
+    container_name: mfnews-localstack
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=us-east-1
+      - DATA_DIR=/tmp/localstack/data
+    ports:
+      - "4566:4566"
+    volumes:
+      - ./localstack:/tmp/localstack
+    networks:
+      - mfnews-network
+
 volumes:
   postgres_data:
     name: mfnews-postgres-data

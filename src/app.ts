@@ -6,6 +6,7 @@ import newsRoutes from './routes/newsRoutes';
 import initializeDatabase from './config/initDb';
 import cors from 'cors';
 import passport from './config/passport';
+import { ensureBucketExists } from './utils/s3Client';
 
 const app = express();
 
@@ -57,6 +58,7 @@ const PORT = 3000;
 const startServer = async () => {
     try {
         await initializeDatabase();
+        await ensureBucketExists('news-images');
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
             console.log(`Swagger documentation available at http://localhost:${PORT}/api-docs`);
